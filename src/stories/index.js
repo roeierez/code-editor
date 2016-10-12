@@ -2,14 +2,16 @@ import React from 'react';
 import { storiesOf, action, linkTo } from '@kadira/storybook';
 import Selections from '../editor/Selections';
 import LineClass from '../editor/LineClass';
+import Marker from '../editor/Marker';
 import 'codemirror/theme/material.css';
+import 'codemirror/theme/night.css';
 import './editor-styles.css';
 import JavascriptCodeEditor from '../editor/javascript';
 import CLikeCodeEditor from '../editor/clike';
 
 storiesOf('CodeEditor', module)
   .add('simple', () => (
-    <JavascriptCodeEditor value="function test(){ return true;}"/>
+    <JavascriptCodeEditor value="function test(){ return true;}" options={{theme: 'night'}}/>
   ))
     .add('read-only', () => (
         <JavascriptCodeEditor value="function test(){ return true;}" options={{readOnly: true}} />
@@ -25,5 +27,21 @@ storiesOf('CodeEditor', module)
     .add('with line class', () => (
         <CLikeCodeEditor value={'int x = 5; \n printf("%i test", 5);'} options={{lineNumbers: true, mode: 'javascript', readOnly: 'nocursor'}}>
           <LineClass lineNumbers={[1]} linesClassName="lineClass1"  />
+        </CLikeCodeEditor>
+    ))
+    .add('with two lines class', () => (
+        <CLikeCodeEditor value={'int x = 5; \n printf("%i test", 5);'} options={{lineNumbers: true, mode: 'javascript', readOnly: 'nocursor'}}>
+            <LineClass lineNumbers={[1]} linesClassName="lineClass1"  />
+            <LineClass lineNumbers={[0]} where="gutter" linesClassName="lineClass1"  />
+        </CLikeCodeEditor>
+    ))
+    .add('with two markers', () => (
+        <CLikeCodeEditor value={'int x = 5; \n printf("%i test", 5);'} options={{
+                lineNumbers: true, mode: 'javascript', readOnly: 'nocursor',
+                gutters: ["breakpoints"]
+            }}
+        >
+            <Marker lineNumber={1} gutterID="breakpoints" gutterComponent={<div style={{color: "#822"}}>●</div>}  />
+            <Marker lineNumber={0} gutterID="breakpoints" gutterComponent={<div style={{color: "black"}}>●</div>}  />
         </CLikeCodeEditor>
     ))
