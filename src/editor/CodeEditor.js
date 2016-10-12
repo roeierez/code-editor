@@ -33,13 +33,17 @@ class CodeEditor extends React.Component {
     componentDidMount() {
         const textareaNode = findDOMNode(this.refs.textarea);
         const codeMirrorInstance = this.getCodeMirrorInstance();
-        this.codeMirror = codeMirrorInstance.fromTextArea(textareaNode, this.props.options);
+        this.codeMirror = codeMirrorInstance.fromTextArea(textareaNode, this.createOptions(this.props.options));
         this.codeMirror.on('change', this.codemirrorValueChanged.bind(this));
         this.codeMirror.on('focus', this.focusChanged.bind(this, true));
         this.codeMirror.on('blur', this.focusChanged.bind(this, false));
         this.codeMirror.on('scroll', this.scrollChanged.bind(this));
         this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');
         this.forceUpdate();
+    }
+
+    createOptions(options) {
+        return options;
     }
 
     componentWillUnmount() {
@@ -54,9 +58,10 @@ class CodeEditor extends React.Component {
             this.codeMirror.setValue(nextProps.value);
         }
         if (typeof nextProps.options === 'object') {
-            for (let optionName in nextProps.options) {
-                if (nextProps.options.hasOwnProperty(optionName)) {
-                    this.codeMirror.setOption(optionName, nextProps.options[optionName]);
+            let options = this.createOptions(nextProps.options);
+            for (let optionName in options) {
+                if (options.hasOwnProperty(optionName)) {
+                    this.codeMirror.setOption(optionName, options[optionName]);
                 }
             }
         }
