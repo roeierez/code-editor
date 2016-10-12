@@ -1,13 +1,13 @@
 import React from 'react';
 import { storiesOf, action, linkTo } from '@kadira/storybook';
+import JavascriptCodeEditor from '../editor/javascript';
+import CLikeCodeEditor from '../editor/clike';
 import Selections from '../editor/Selections';
 import LineClass from '../editor/LineClass';
 import Marker from '../editor/Marker';
 import 'codemirror/theme/material.css';
 import 'codemirror/theme/night.css';
 import './editor-styles.css';
-import JavascriptCodeEditor from '../editor/javascript';
-import CLikeCodeEditor from '../editor/clike';
 
 storiesOf('CodeEditor', module)
   .add('simple', () => (
