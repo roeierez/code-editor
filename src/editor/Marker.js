@@ -36,7 +36,6 @@ class Marker extends React.Component {
         if (this.props.codeMirror) {
             var div = document.createElement('div');
             div.innerHTML = ReactDOMServer.renderToString(this.props.gutterComponent);
-            console.error(div.innerHTML);
             var node = div.firstChild;
             let doc = this.props.codeMirror;//.getDoc();
             doc.setGutterMarker(this.props.lineNumber, this.props.gutterID, node);

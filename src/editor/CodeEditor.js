@@ -78,7 +78,6 @@ class CodeEditor extends React.Component {
     }
 
     focusChanged(focused) {
-        console.error('focusedChanged');
         this.setState({
             isFocused: focused
         });
@@ -116,7 +115,7 @@ class CodeEditor extends React.Component {
             if (!children) return;
 
             return React.Children.map(children, c => {
-                return React.cloneElement(c, {
+                return c && React.cloneElement(c, {
                     codeMirror: this.codeMirror
                 });
             })

@@ -23,12 +23,10 @@ class LineClass extends React.Component {
     }
 
     clearLinesClass(props) {
-        console.error('unmounting LIneClass');
         if (this.props.codeMirror) {
             let doc = this.props.codeMirror.getDoc(),
                 workingProps = props || this.props;
             workingProps.lineNumbers.forEach(ln => {
-                console.error('remove line class ' + ln);
                 doc.removeLineClass(ln, workingProps.where, workingProps.linesClassName)
             });
         }
@@ -38,7 +36,6 @@ class LineClass extends React.Component {
         if (this.props.codeMirror) {
             let doc = this.props.codeMirror.getDoc();
             this.props.lineNumbers.forEach(ln => {
-                console.error('add line class ' + ln);
                 doc.addLineClass(ln, this.props.where, this.props.linesClassName)
             });
         }

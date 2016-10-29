@@ -6,7 +6,6 @@ import 'codemirror/mode/javascript/javascript';
 class JavascriptCodeEditor extends CodeEditor {
 
     createOptions(options) {
-        console.error("create options");
         return {...options, mode: 'javascript'};
     }
 }

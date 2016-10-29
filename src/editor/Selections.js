@@ -28,7 +28,6 @@ class Selections extends React.Component {
     }
 
     renderSelections() {
-        console.error('renderSelections');
         if (this.props.codeMirror) {
             this.props.codeMirror.getDoc().setSelections(this.props.selectionsArray);
         }
