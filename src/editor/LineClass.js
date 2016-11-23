@@ -2,8 +2,8 @@ import React, {PropTypes} from 'react';
 
 class LineClass extends React.Component {
 
-    static proptTypes = {
-        codeMirror: PropTypes.object,
+    static propTypes = {
+        propTypes: PropTypes.object,
         lineNumbers: PropTypes.arrayOf(PropTypes.number),
         linesClassName: PropTypes.string,
         where: PropTypes.string
@@ -11,6 +11,31 @@ class LineClass extends React.Component {
 
     componentDidMount() {
         this.renderLinesClass();
+    }
+
+    shouldComponentUpdate(props) {
+        let {lineNumbers=[], lineClassName="", where} = props,
+            {prevLineNumbers=[], prevClassName="", prevWhere} = this.props;
+
+        if (lineNumbers.length != prevLineNumbers.length) {
+            return true;
+        }
+
+        for (var i=0; i<lineNumbers.length; ++i) {
+            if (lineNumbers[i] != prevLineNumbers[i]){
+                return true;
+            }
+        }
+
+        if (lineClassName != prevClassName) {
+            return true;
+        }
+
+        if (where != prevWhere) {
+            return true;
+        }
+
+        return false;
     }
 
     componentDidUpdate(prevProps) {

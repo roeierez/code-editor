@@ -2,13 +2,18 @@ import React, {PropTypes} from 'react';
 
 class Selections extends React.Component {
 
-    static proptTypes = {
+    static propTypes = {
         codeMirror: PropTypes.object,
         selectionsArray: PropTypes.arrayOf(PropTypes.object)
     }
 
+    constructor(props) {
+        super(props);
+        this.selectionChanged = this.beforeSelectionChange.bind(this);
+    }
+
     componentDidMount() {
-        this.props.codeMirror.on('beforeSelectionChange', this.beforeSelectionChange.bind(this));
+        this.props.codeMirror.on('beforeSelectionChange', this.selectionChanged);
         this.renderSelections();
     }
 
@@ -18,8 +23,8 @@ class Selections extends React.Component {
 
     componentWillUnmount() {
         if (this.props.codeMirror) {
+            this.props.codeMirror.off('beforeSelectionChange', this.selectionChanged);
             this.props.codeMirror.getDoc().setSelections([{anchor: {line: 0, ch: 0}, head: {line: 0, ch:0 }}]);
-            this.props.codeMirror.off('beforeSelectionChange', this.beforeSelectionChange.bind(this));
         }
     }
 

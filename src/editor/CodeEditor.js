@@ -57,14 +57,6 @@ class CodeEditor extends React.Component {
         if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() !== nextProps.value) {
             this.codeMirror.setValue(nextProps.value);
         }
-        if (typeof nextProps.options === 'object') {
-            let options = this.createOptions(nextProps.options);
-            for (let optionName in options) {
-                if (options.hasOwnProperty(optionName)) {
-                    this.codeMirror.setOption(optionName, options[optionName]);
-                }
-            }
-        }
     }
 
     getCodeMirror() {

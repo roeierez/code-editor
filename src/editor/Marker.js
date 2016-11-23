@@ -1,49 +1,32 @@
 import React, {PropTypes} from 'react';
 import ReactDOMServer from 'react-dom/server';
+import EditorOperation from './EditorOperation';
 
-class Marker extends React.Component {
+class Marker extends EditorOperation {
 
-    static proptTypes = {
+    static propTypes = {
         codeMirror: PropTypes.object,
         lineNumber: PropTypes.number,
         gutterID: PropTypes.string,
         gutterComponent: PropTypes.element
     }
 
-    componentDidMount() {
-        debugger;
-        this.renderMarker();
-    }
 
-    componentDidUpdate(prevProps) {
-        this.clearMarker(prevProps);
-        this.renderMarker();
-    }
-
-    componentWillUnmount() {
-        this.clearMarker();
-    }
-
-    clearMarker(props) {
-        if (this.props.codeMirror) {
-            let doc = this.props.codeMirror,//.getDoc(),
-                workingProps = props || this.props;
-            doc.setGutterMarker(workingProps.lineNumber, workingProps.gutterID, null);
+    undoOperation(props) {
+        if (props.codeMirror) {
+            let doc = props.codeMirror;//.getDoc(),
+            doc.setGutterMarker(props.lineNumber, props.gutterID, null);
         }
     }
 
-    renderMarker() {
-        if (this.props.codeMirror) {
+    doOperation(props) {
+        if (props.codeMirror) {
             var div = document.createElement('div');
-            div.innerHTML = ReactDOMServer.renderToString(this.props.gutterComponent);
+            div.innerHTML = ReactDOMServer.renderToString(props.gutterComponent);
             var node = div.firstChild;
-            let doc = this.props.codeMirror;//.getDoc();
-            doc.setGutterMarker(this.props.lineNumber, this.props.gutterID, node);
+            let doc = props.codeMirror;//.getDoc();
+            doc.setGutterMarker(props.lineNumber, props.gutterID, node);
         }
-    }
-
-    render() {
-        return null;
     }
 }
 
