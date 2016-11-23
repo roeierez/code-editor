@@ -14,7 +14,7 @@ class LineClass extends React.Component {
     }
 
     shouldComponentUpdate(props) {
-        let {lineNumbers=[], lineClassName="", where} = props,
+        let {lineNumbers=[], lineClassName, where} = props,
             prevLineNumbers = this.props.lineNumbers || [],
             prevClassName = this.props.className,
             prevWhere = this.props.where;
