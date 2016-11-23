@@ -11,6 +11,9 @@ class Marker extends EditorOperation {
         gutterComponent: PropTypes.element
     }
 
+    shouldComponentUpdate(props) {
+        return this.props.lineNumber != props.lineNumber || this.props.gutterID != props.gutterID;
+    }
 
     undoOperation(props) {
         if (props.codeMirror) {
