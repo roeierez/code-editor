@@ -41,11 +41,11 @@ class CodeEditor extends React.Component {
         var charWidth = this.codeMirror.defaultCharWidth(), basePadding = 4;
 
         if (this.props.options.lineWrapping === true) {
-            this.codeMirror.on("renderLine", (cm, line, elt) => {                                
-                var off = codeMirrorInstance.countColumn(line.text, null, cm.getOption("tabSize")) * charWidth;
-                elt.style.textIndent = "-" + off + "px";
-                elt.style.paddingLeft = (basePadding + off) + "px";
-            });            
+            // this.codeMirror.on("renderLine", (cm, line, elt) => {                                
+            //     var off = codeMirrorInstance.countColumn(line.text, null, cm.getOption("tabSize")) * charWidth;
+            //     elt.style.textIndent = "-" + off + "px";
+            //     elt.style.paddingLeft = (basePadding + off) + "px";
+            // });            
         }        
         this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');                
         this.forceUpdate();
