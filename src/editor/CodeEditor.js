@@ -52,9 +52,9 @@ class CodeEditor extends React.Component {
     }
 
     componentDidUpdate(){
-        // for (var i=0; i< this.codeMirror.lineCount(); ++i) {
-        //     this.codeMirror.indentLine(i);
-        // }  
+        for (var i=0; i< this.codeMirror.lineCount(); ++i) {
+            this.codeMirror.indentLine(i);
+        }  
     }
 
     createOptions(options) {
@@ -71,10 +71,7 @@ class CodeEditor extends React.Component {
     componentWillReceiveProps(nextProps) {
         if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() !== nextProps.value) {
             this.codeMirror.setValue(nextProps.value);
-        }
-         for (var i=0; i< this.codeMirror.lineCount(); ++i) {
-            this.codeMirror.indentLine(i);
-        }  
+        }           
     }
 
     getCodeMirror() {
