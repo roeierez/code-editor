@@ -47,11 +47,11 @@ class CodeEditor extends React.Component {
                 elt.style.textIndent = "-" + off + "px";
                 elt.style.paddingLeft = (basePadding + off) + "px";
             });
-            this.codeMirror.on("update", (cm, line, elt) => { 
-                for (var i=0; i< this.codeMirror.lineCount(); ++i) {
-                    this.codeMirror.indentLine(i);
-                }                
-            })
+            // this.codeMirror.on("update", (cm, line, elt) => { 
+            //     for (var i=0; i< this.codeMirror.lineCount(); ++i) {
+            //         this.codeMirror.indentLine(i);
+            //     }                
+            // })
         }
       
         this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');        
