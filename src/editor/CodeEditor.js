@@ -38,7 +38,23 @@ class CodeEditor extends React.Component {
         this.codeMirror.on('focus', this.focusChanged.bind(this, true));
         this.codeMirror.on('blur', this.focusChanged.bind(this, false));
         this.codeMirror.on('scroll', this.scrollChanged.bind(this));
-        this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');
+        var charWidth = this.codeMirror.defaultCharWidth(), basePadding = 4;
+
+        if (this.props.options.lineWrapping === true) {
+            this.codeMirror.on("renderLine", (cm, line, elt) => {                
+                this.codeMirror.indentLine(line.numer);     
+                var off = codeMirrorInstance.countColumn(line.text, null, cm.getOption("tabSize")) * charWidth;
+                elt.style.textIndent = "-" + off + "px";
+                elt.style.paddingLeft = (basePadding + off) + "px";
+            });
+            this.codeMirror.on("update", (cm, line, elt) => { 
+                for (var i=0; i< this.codeMirror.lineCount(); ++i) {
+                    this.codeMirror.indentLine(i);
+                }                
+            })
+        }
+      
+        this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');        
         this.forceUpdate();
     }
 

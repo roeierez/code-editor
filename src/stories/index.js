@@ -13,7 +13,7 @@ import Movie from './Movie';
 
 storiesOf('CodeEditor', module)
     .add('simple', () => (
-        <JavascriptCodeEditor value="function test(){ return true;}" options={{theme: 'night'}}/>
+        <CLikeCodeEditor value={'void foo(){ \nint x = 5; \nprintf("%i test", 5); \n}'}  options={{theme: 'night', lineWrapping: true}}/>
     ))
     .add('read-only', () => (
         <JavascriptCodeEditor value="function test(){ return true;}" options={{readOnly: true}}/>
