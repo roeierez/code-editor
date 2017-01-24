@@ -41,21 +41,20 @@ class CodeEditor extends React.Component {
         var charWidth = this.codeMirror.defaultCharWidth(), basePadding = 4;
 
         if (this.props.options.lineWrapping === true) {
-            this.codeMirror.on("renderLine", (cm, line, elt) => {                
-                this.codeMirror.indentLine(line.numer);     
+            this.codeMirror.on("renderLine", (cm, line, elt) => {                                
                 var off = codeMirrorInstance.countColumn(line.text, null, cm.getOption("tabSize")) * charWidth;
                 elt.style.textIndent = "-" + off + "px";
                 elt.style.paddingLeft = (basePadding + off) + "px";
-            });
-            // this.codeMirror.on("update", (cm, line, elt) => { 
-            //     for (var i=0; i< this.codeMirror.lineCount(); ++i) {
-            //         this.codeMirror.indentLine(i);
-            //     }                
-            // })
-        }
-      
-        this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');        
+            });            
+        }        
+        this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');                
         this.forceUpdate();
+    }
+
+    componentDidUpdate(){
+        // for (var i=0; i< this.codeMirror.lineCount(); ++i) {
+        //     this.codeMirror.indentLine(i);
+        // }  
     }
 
     createOptions(options) {
@@ -73,6 +72,9 @@ class CodeEditor extends React.Component {
         if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() !== nextProps.value) {
             this.codeMirror.setValue(nextProps.value);
         }
+         for (var i=0; i< this.codeMirror.lineCount(); ++i) {
+            this.codeMirror.indentLine(i);
+        }  
     }
 
     getCodeMirror() {
