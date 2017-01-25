@@ -9,71 +9,24 @@ class LineClass extends React.Component {
         where: PropTypes.string
     }
 
-    constructor(prop) {
+    constructor(props) {
         super(props);
-        this.renderLinesClass = this.renderLinesClass.bind(this);
+        this.addClass = this.addClass.bind(this);
     }
 
     componentDidMount() {
-        this.renderLinesClass();
-        this.codeMirror.on("update", this.renderLinesClass);
+        //this.renderLinesClass();
+        this.props.codeMirror.on("renderLine", this.addClass);
+        this.props.codeMirror.refresh();
     }
 
-    shouldComponentUpdate(props) {
-        let {lineNumbers=[], lineClassName, where} = props,
-            prevLineNumbers = this.props.lineNumbers || [],
-            prevClassName = this.props.className,
-            prevWhere = this.props.where;
-
-        if (lineNumbers.length != prevLineNumbers.length) {
-            return true;
+    addClass(cm, line, elt) {
+       // debugger;
+        let lineNumber = cm.lineInfo(line).line;
+        if (this.props.lineNumbers.indexOf(lineNumber) >= 0) {            
+            elt.className += ` ${this.props.linesClassName}`;
         }
-
-        for (var i=0; i<lineNumbers.length; ++i) {
-            if (lineNumbers[i] != prevLineNumbers[i]){
-                return true;
-            }
-        }
-
-        if (lineClassName != prevClassName) {
-            return true;
-        }
-
-        if (where != prevWhere) {
-            return true;
-        }
-
-        return false;
-    }
-
-    componentDidUpdate(prevProps) {
-        this.clearLinesClass(prevProps);
-        this.renderLinesClass();
-    }
-
-    componentWillUnmount() {
-        this.clearLinesClass();
-        this.codeMirror.off("update", this.renderLinesClass);
-    }
-
-    clearLinesClass(props) {
-        if (this.props.codeMirror) {
-            let doc = this.props.codeMirror.getDoc(),
-                workingProps = props || this.props;
-            workingProps.lineNumbers.forEach(ln => {
-                doc.removeLineClass(ln, workingProps.where, workingProps.linesClassName)
-            });
-        }
-    }
-
-    renderLinesClass() {
-        if (this.props.codeMirror) {
-            let doc = this.props.codeMirror.getDoc();
-            this.props.lineNumbers.forEach(ln => {
-                doc.addLineClass(ln, this.props.where, this.props.linesClassName)
-            });
-        }
-    }
+    }    
 
     render() {
         return null;

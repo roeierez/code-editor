@@ -12,7 +12,7 @@ class EditorOperation extends React.Component {
 
     componentDidMount() {
         this.doOperation(this.props);
-        this.codeMirror.on("update", this.onEditorUpdated);
+       // this.codeMirror.on("update", this.onEditorUpdated);
     }
 
     onEditorUpdated() {
@@ -25,10 +25,11 @@ class EditorOperation extends React.Component {
     }
 
     componentWillUnmount() {
+       // this.codeMirror.off("update", this.onEditorUpdated);
         if (this.props.codeMirror) {
             this.undoOperation(this.props);
         }
-        this.codeMirror.off("update", this.onEditorUpdated);
+       // this.codeMirror.off("update", this.onEditorUpdated);
     }
 
     getDoc() {

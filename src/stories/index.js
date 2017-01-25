@@ -11,7 +11,32 @@ import './editor-styles.css';
 import MoveCursor from '../editor/MoveCursor';
 import Movie from './Movie';
 
+class UpdatedEditor extends React.Component {
+
+    componentDidMount() {
+        setTimeout(() => {
+            this.forceUpdate();
+        }, 1000);
+    }
+
+    render() {
+        return (
+            <CLikeCodeEditor value={'int x = 5; \n printf("%i test", 5);'} options={{
+            lineNumbers: true, mode: 'javascript', readOnly: 'nocursor',
+            gutters: ["breakpoints"]
+        }}
+        >
+            <Marker lineNumber={1} gutterID="breakpoints" gutterComponent={<div style={{color: "#822"}}>●</div>}/>
+            <Marker lineNumber={0} gutterID="breakpoints" gutterComponent={<div style={{color: "black"}}>●</div>}/>
+        </CLikeCodeEditor>
+        );
+    }
+}
+
 storiesOf('CodeEditor', module)
+    .add('updated', () => (
+        <UpdatedEditor />
+    ))
     .add('simple', () => (
         <CLikeCodeEditor value={'void foo(){ \nint x = 5; \nprintf("%i test", 5); \n}'} autoIndent  options={{theme: 'night', lineWrapping: true}}/>
     ))
