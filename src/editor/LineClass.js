@@ -9,8 +9,14 @@ class LineClass extends React.Component {
         where: PropTypes.string
     }
 
+    constructor(prop) {
+        super(props);
+        this.renderLinesClass = this.renderLinesClass.bind(this);
+    }
+
     componentDidMount() {
         this.renderLinesClass();
+        this.codeMirror.on("update", this.renderLinesClass);
     }
 
     shouldComponentUpdate(props) {
@@ -47,6 +53,7 @@ class LineClass extends React.Component {
 
     componentWillUnmount() {
         this.clearLinesClass();
+        this.codeMirror.off("update", this.renderLinesClass);
     }
 
     clearLinesClass(props) {
