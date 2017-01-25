@@ -16,7 +16,8 @@ class CodeEditor extends React.Component {
         onScroll: PropTypes.func,
         options: PropTypes.object,
         path: PropTypes.string,
-        value: PropTypes.string
+        value: PropTypes.string,
+        autoIndent: PropTypes.bool
     };
 
     constructor(props) {
@@ -39,22 +40,27 @@ class CodeEditor extends React.Component {
         this.codeMirror.on('blur', this.focusChanged.bind(this, false));
         this.codeMirror.on('scroll', this.scrollChanged.bind(this));
         var charWidth = this.codeMirror.defaultCharWidth(), basePadding = 4;
-
-        if (this.props.options.lineWrapping === true) {
-            // this.codeMirror.on("renderLine", (cm, line, elt) => {                                
-            //     var off = codeMirrorInstance.countColumn(line.text, null, cm.getOption("tabSize")) * charWidth;
-            //     elt.style.textIndent = "-" + off + "px";
-            //     elt.style.paddingLeft = (basePadding + off) + "px";
-            // });            
-        }        
+           
         this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');                
         this.forceUpdate();
+        if (this.props.autoIndent === true) {
+            this.codeMirror.on("renderLine", (cm, line, elt) => {                                
+                var off = codeMirrorInstance.countColumn(line.text, null, cm.getOption("tabSize")) * charWidth;
+                elt.style.textIndent = "-" + off + "px";
+                elt.style.paddingLeft = (basePadding + off) + "px";
+            });
+            for (var i=0; i< this.codeMirror.lineCount(); ++i) {
+                this.codeMirror.indentLine(i);
+            }            
+        }             
     }
 
     componentDidUpdate(){
-        for (var i=0; i< this.codeMirror.lineCount(); ++i) {
-            this.codeMirror.indentLine(i);
-        }  
+        if (this.props.autoIndent === true) {
+            for (var i=0; i< this.codeMirror.lineCount(); ++i) {
+                this.codeMirror.indentLine(i);
+            }  
+        }
     }
 
     createOptions(options) {
