@@ -20,6 +20,11 @@ class LineClass extends React.Component {
         this.props.codeMirror.refresh();
     }
 
+    componentWillUnmount() {
+        this.props.codeMirror.off("renderLine", this.addClass);
+        this.props.codeMirror.refresh();
+    }
+
     addClass(cm, line, elt) {
        // debugger;
         let lineNumber = cm.lineInfo(line).line;
