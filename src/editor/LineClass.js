@@ -10,26 +10,34 @@ class LineClass extends React.Component {
     }
 
     constructor(props) {
-        super(props);
-        this.addClass = this.addClass.bind(this);
+        super(props);        
+        this.onUpdate = this.onUpdate.bind(this);
     }
 
-    componentDidMount() {
-        //this.renderLinesClass();
-        this.props.codeMirror.on("renderLine", this.addClass);
-        this.props.codeMirror.refresh();
+    componentDidMount() {         
+        this.mounted = true;
+        this.props.codeEditor.addEditorListener(this);        
     }
 
-    componentWillUnmount() {
-        this.props.codeMirror.off("renderLine", this.addClass);
-        this.props.codeMirror.refresh();
+    componentWillUnmount() {                
+        this.lineClassName = this.props.lineClassName;
+        this.lineNumbers = this.props.lineNumbers;
+        this.mounted = false;
     }
 
-    addClass(cm, line, elt) {
-       // debugger;
-        let lineNumber = cm.lineInfo(line).line;
-        if (this.props.lineNumbers.indexOf(lineNumber) >= 0) {            
-            elt.className += ` ${this.props.linesClassName}`;
+    onUpdate(codeMirror, codeUpdated) {        
+        if (!this.mounted) {            
+            this.lineNumbers.forEach(l => {
+                codeMirror.removeLineClass(l, "text", this.linesClassName);
+            });
+            return false;
+        } else {
+            if (codeUpdated || !this.firstTime) {                
+                this.props.lineNumbers.forEach(l => {
+                    codeMirror.addLineClass(l, this.props.where, this.props.linesClassName);
+                });        
+            }
+            this.updated = true;
         }
     }    
 
@@ -39,7 +47,7 @@ class LineClass extends React.Component {
 }
 
 LineClass.defaultProps = {
-    where: 'wrap'
+    where: 'text'
 }
 
 export default LineClass;

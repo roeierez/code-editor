@@ -24,9 +24,10 @@ class CodeEditor extends React.Component {
         super(props);
         this.state = {
             isFocused: false
-        }
+        }        
+        this.editorListeners = [];
     }
-
+   
     getCodeMirrorInstance() {
         return this.props.codeMirrorInstance || require('codemirror');
     }
@@ -39,28 +40,58 @@ class CodeEditor extends React.Component {
         this.codeMirror.on('focus', this.focusChanged.bind(this, true));
         this.codeMirror.on('blur', this.focusChanged.bind(this, false));
         this.codeMirror.on('scroll', this.scrollChanged.bind(this));
-        var charWidth = this.codeMirror.defaultCharWidth(), basePadding = 4;
-           
-        this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');                
-        this.forceUpdate();
+        var charWidth = this.codeMirror.defaultCharWidth(), basePadding = 4;                
+        
         if (this.props.autoIndent === true) {
-            this.codeMirror.on("renderLine", (cm, line, elt) => {                                
+            this.codeMirror.on("renderLine", (cm, line, elt) => {                    
                 var off = codeMirrorInstance.countColumn(line.text, null, cm.getOption("tabSize")) * charWidth;
                 elt.style.textIndent = "-" + off + "px";
                 elt.style.paddingLeft = (basePadding + off) + "px";
-            });
-            for (var i=0; i< this.codeMirror.lineCount(); ++i) {
-                this.codeMirror.indentLine(i);
-            }            
+            });                                   
         }             
+        //this.forceUpdate();
+        this.updateEditor();
     }
 
-    componentDidUpdate(){
-        if (this.props.autoIndent === true) {
-            for (var i=0; i< this.codeMirror.lineCount(); ++i) {
-                this.codeMirror.indentLine(i);
-            }  
-        }
+    componentDidUpdate(){            
+        this.updateEditor();              
+    }
+
+    updateEditor() {          
+        this.codeMirror.operation(() => {
+            let toRemove = [],
+                codeUpdated = this.codeMirror && this.props.value != null && this.codeMirror.getValue() !== this.props.value;
+            if (codeUpdated) {            
+                this.codeMirror.setValue(this.props.value);  
+                for (var i=0; i< this.codeMirror.lineCount(); ++i) {                
+                    this.codeMirror.indentLine(i);
+                }                          
+            }
+            
+            this.editorListeners.forEach(l => {
+                if (l.onUpdate(this.codeMirror, codeUpdated) == false) {
+                    toRemove.push(l);
+                }
+            }); 
+
+            toRemove.forEach(tr => {
+                let index = this.editorListeners.indexOf(tr);
+                if (index >= 0) {
+                    this.editorListeners.splice(index,1);
+                }
+            })  
+        })
+    }
+
+    addEditorListener(l) {
+        this.editorListeners.push(l);
+    }
+
+    removeEditorListener(l) {
+        let index = this.editorListeners.indexOf(l);
+        if (index >= 0) {
+            this.editorListeners.splice(index, 1);
+        }        
     }
 
     createOptions(options) {
@@ -72,13 +103,7 @@ class CodeEditor extends React.Component {
         if (this.codeMirror) {
             this.codeMirror.toTextArea();
         }
-    }
-
-    componentWillReceiveProps(nextProps) {
-        if (this.codeMirror && nextProps.value !== undefined && this.codeMirror.getValue() !== nextProps.value) {
-            this.codeMirror.setValue(nextProps.value);
-        }           
-    }
+    }    
 
     getCodeMirror() {
         return this.codeMirror;
@@ -115,7 +140,7 @@ class CodeEditor extends React.Component {
         );
         return (
             <div className={editorClassName}>
-                <textarea ref="textarea" name={this.props.path} defaultValue={this.props.value} autoComplete="off"/>
+                <textarea ref="textarea" name={this.props.path}  autoComplete="off"/>
                 {this.renderChildren()}
             </div>
         );
@@ -129,7 +154,8 @@ class CodeEditor extends React.Component {
 
             return React.Children.map(children, c => {
                 return c && React.cloneElement(c, {
-                    codeMirror: this.codeMirror
+                    codeMirror: this.codeMirror,
+                    codeEditor: this                    
                 });
             })
         }

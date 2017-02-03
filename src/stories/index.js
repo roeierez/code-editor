@@ -15,19 +15,33 @@ class UpdatedEditor extends React.Component {
 
     componentDidMount() {
         setTimeout(() => {
+            this.updated = true;
             this.forceUpdate();
-        }, 1000);
+        }, 3000);
     }
 
     render() {
+        if (!this.updated) {
+            return (
+                <CLikeCodeEditor value={'int x = 5; \n printf("%i test", 5);'} options={{
+                    lineNumbers: true, mode: 'javascript', readOnly: 'nocursor',
+                    gutters: ["breakpoints"]
+                }}
+                >            
+            
+            <Marker key="0" lineNumber={0} gutterID="breakpoints" gutterComponent={<div style={{color: "black"}}>●</div>}/>
+        </CLikeCodeEditor>
+            )
+        }
         return (
             <CLikeCodeEditor value={'int x = 5; \n printf("%i test", 5);'} options={{
             lineNumbers: true, mode: 'javascript', readOnly: 'nocursor',
             gutters: ["breakpoints"]
         }}
         >
-            <Marker lineNumber={1} gutterID="breakpoints" gutterComponent={<div style={{color: "#822"}}>●</div>}/>
-            <Marker lineNumber={0} gutterID="breakpoints" gutterComponent={<div style={{color: "black"}}>●</div>}/>
+            
+            <Marker key="1" lineNumber={1} gutterID="breakpoints" gutterComponent={<div style={{color: "#822"}}>●</div>}/>
+            
         </CLikeCodeEditor>
         );
     }
@@ -59,10 +73,10 @@ storiesOf('CodeEditor', module)
         </CLikeCodeEditor>
     ))
     .add('with two lines class', () => (
-        <CLikeCodeEditor value={'int x = 5; \n printf("%i test", 5);'}
+        <CLikeCodeEditor autoIndent value={'int x = 5; \n printf("%i test", 5);'}
                          options={{lineNumbers: true, mode: 'javascript', readOnly: 'nocursor'}}>
-            <LineClass lineNumbers={[1]} linesClassName="lineClass1"/>
-            <LineClass lineNumbers={[0]} where="gutter" linesClassName="lineClass1"/>
+            <LineClass key="1" lineNumbers={[1]} linesClassName="lineClass1"/>
+            <LineClass key="2" lineNumbers={[0]} linesClassName="lineClass1"/>
         </CLikeCodeEditor>
     ))
     .add('with two markers', () => (
