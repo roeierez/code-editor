@@ -49,8 +49,7 @@ class CodeEditor extends React.Component {
                 elt.style.paddingLeft = (basePadding + off) + "px";
             });                                   
         }             
-        //this.forceUpdate();
-        this.updateEditor();
+        this.forceUpdate();        
     }
 
     componentDidUpdate(){            
