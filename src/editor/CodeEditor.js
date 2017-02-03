@@ -41,7 +41,7 @@ class CodeEditor extends React.Component {
         this.codeMirror.on('blur', this.focusChanged.bind(this, false));
         this.codeMirror.on('scroll', this.scrollChanged.bind(this));
         var charWidth = this.codeMirror.defaultCharWidth(), basePadding = 4;                
-        
+        this.codeMirror.setValue(this.props.defaultValue || this.props.value || '');
         if (this.props.autoIndent === true) {
             this.codeMirror.on("renderLine", (cm, line, elt) => {                    
                 var off = codeMirrorInstance.countColumn(line.text, null, cm.getOption("tabSize")) * charWidth;
@@ -59,7 +59,7 @@ class CodeEditor extends React.Component {
     updateEditor() {          
         this.codeMirror.operation(() => {
             let toRemove = [],
-                codeUpdated = this.codeMirror && this.props.value != null && this.codeMirror.getValue() !== this.props.value;
+                codeUpdated = !this.firstTime || this.codeMirror && this.props.value != null && this.codeMirror.getValue() !== this.props.value;
             if (codeUpdated) {            
                 this.codeMirror.setValue(this.props.value);  
                 for (var i=0; i< this.codeMirror.lineCount(); ++i) {                
@@ -80,6 +80,8 @@ class CodeEditor extends React.Component {
                 }
             })  
         })
+
+        this.firstTime = true;
     }
 
     addEditorListener(l) {
